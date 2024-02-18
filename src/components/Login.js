@@ -9,6 +9,15 @@ const Login = () => {
     // Implement login logic here
     console.log('Logging in with:', email, password);
   };
+  const element = document.getElementById('some-element');
+    if (element) {
+    element.addEventListener('click', handleClick);
+}
+const handleClick = () => {
+    // Implement your logic here
+    console.log('Button clicked!');
+  };
+  
 
   return (
     <div>

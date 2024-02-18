@@ -32,7 +32,7 @@ async function main() {
 
   try {
     const content = await generateContent(prompt, role);
-    console.log(content.content.text);
+    console.log(content);
   } catch (error) {
     console.error("Error:", error);
   }

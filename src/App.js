@@ -4,7 +4,9 @@ import Swiper from 'swiper';
 import './swiper-bundle.min.css';
 // import 'swiper/swiper-bundle.min.css';
 import ScrollReveal from 'scrollreveal';
-import { BrowserRouter as Router, Route, Switch, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Switch} from 'react-router-dom';
+
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 import Login from './components/Login';
@@ -13,6 +15,7 @@ import Footer from './components/Footer';
 function App() {
     // State for managing theme
     const [theme, setTheme] = useState('light');
+    
 
     useEffect(() => {
         /*==================== SHOW MENU ====================*/
@@ -78,14 +81,14 @@ function App() {
             }
         }
 
-        videoButton.addEventListener('click', playPause);
+        // videoButton.addEventListener('click', playPause);
 
         function finalVideo() {
             videoIcon.classList.remove('ri-pause-line');
             videoIcon.classList.add('ri-play-line');
         }
 
-        videoFile.addEventListener('ended', finalVideo);
+        // videoFile.addEventListener('ended', finalVideo);
 
         /*==================== SHOW SCROLL UP ====================*/
         function scrollUp() {
@@ -178,15 +181,16 @@ function App() {
   return (
     <div className="App">
             <Router>
-                    <Header />
-                        <Routes>
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/" element={<MainContent />} />
-                        </Routes>
-                    <Footer />
+                <Header />
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/" element={<MainContent />} />
+                </Routes>
+                <Footer />
             </Router>
-    </div>
+        </div>
+    
   );
 }
 
