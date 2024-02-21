@@ -1,0 +1,29 @@
+.background {
+    background-image: url('https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/07/ba/5c/49.jpg');
+    background-size: contain;
+    padding: 70px;
+}
+.text{
+  color: #ffff;
+}
+
+.tabs {
+    color: #ffff;
+    padding-right: 0.9rem;
+}
+
+.tabs:hover {
+    color: var(#ffff);
+}
+.channels{
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+.heading{
+  padding-top: 8px;
+  padding-bottom: 14px;
+  color: #ffff;
+}
+.ch{
+  padding-bottom: 10px;
+} 
