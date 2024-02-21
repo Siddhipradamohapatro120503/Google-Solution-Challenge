@@ -18,9 +18,17 @@ function App() {
 
   // Function to handle login
   const handleLogin = async (email, password) => {
+      console.log('User:', firebase.auth().currentUser);
+      localStorage.setItem('user', JSON.stringify(firebase.auth().currentUser));
+      console.log('Logging in:', email, password);
     try {
+        console.log('firebase step start');
       await firebase.auth().signInWithEmailAndPassword(email, password);
+        console.log('firebase step complete');
       setUser(firebase.auth().currentUser);
+        console.log('User is set:', user);
+
+        console.log('Logged in:', JSON.parse(localStorage.getItem('user')));
     } catch (error) {
       console.error('Error logging in:', error.message);
     }
@@ -28,9 +36,12 @@ function App() {
 
   // Function to handle logout
   const handleLogout = async () => {
+      localStorage.removeItem('user');
+      console.log('User:', firebase.auth().currentUser);
     try {
       await firebase.auth().signOut();
       setUser(null);
+
     } catch (error) {
       console.error('Error logging out:', error.message);
     }
@@ -100,7 +111,7 @@ function App() {
                 videoIcon.classList.add('ri-play-line');
             }
         }
-        videoButton.addEventListener('click', playPause);
+        // videoButton.addEventListener('click', playPause);
 
         function finalVideo(){
             // Video ends, icon change
@@ -108,7 +119,7 @@ function App() {
             videoIcon.classList.add('ri-play-line');
         }
         // ended, when the video ends
-        videoFile.addEventListener('ended', finalVideo);
+        // videoFile.addEventListener('ended', finalVideo);
 
 
         /*==================== SHOW SCROLL UP ====================*/ 
