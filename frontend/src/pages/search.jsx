@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import './style/search.css'; // Import CSS file for styling
 
 function Search() {
   const [query, setQuery] = useState('');
   const [generatedContent, setGeneratedContent] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // State variable for loading indicator
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true); // Set loading to true when search begins
 
     try {
-      const response = await fetch('http://localhost:3001/generate-content', {
+      const response = await fetch('http://localhost:8000/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -21,9 +25,18 @@ function Search() {
       }
 
       const data = await response.json();
-      setGeneratedContent(data.content.text);
+      console.log('Response:', data); // Log the response data
+
+      // Check if the response contains the expected structure
+      if (!data.response || typeof data.response !== 'string') {
+        throw new Error('Invalid response data structure');
+      }
+
+      setGeneratedContent(data.response);
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false); // Set loading to false after search completes (whether successful or not)
     }
   };
 
@@ -33,14 +46,23 @@ function Search() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={query} onChange={handleInputChange} />
-        <button type="submit">Generate Content</button>
-      </form>
-      <div>
-        <h2>Generated Content:</h2>
-        <p>{generatedContent}</p>
-      </div>
+      <section className="laws search" id="laws">
+        <h1 className="section-title">Laws</h1>
+        <div className="search_bar">
+          <form onSubmit={handleSubmit}>
+            <input type="text" id="searchInput" placeholder="Search laws..." onChange={handleInputChange} value={query} />
+            <button className="button dropbtn" type="submit" disabled={isLoading}>
+              {isLoading ? 'Loading...' : 'Search'} {/* Display "Loading..." when isLoading is true */}
+            </button>
+          </form>
+          <div className="laws__item">
+            <h2>Laws Content:</h2>
+            <div className="markdown-content">
+              <ReactMarkdown>{generatedContent}</ReactMarkdown>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
