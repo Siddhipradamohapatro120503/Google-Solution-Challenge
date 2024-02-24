@@ -23,6 +23,7 @@ const Header = () => {
 
     const handleLogout = async () => {
         try {
+            localStorage.removeItem("user");
             await firebase.auth().signOut();
             setUser(null);
             setShowSearch(false); // Set showSearch to false after logout

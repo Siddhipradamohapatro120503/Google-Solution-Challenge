@@ -1,10 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "./style/community_style.css";
+import axios from 'axios';
+import CommunityCard from '../components/CommunityCard';
+import firebase from '../config.js';
+import CommunitySearch from '../components/CommunitySearch.jsx';
 
 const Community = () => {
   const offcanvasRef = useRef(null);
+
+  const [communities, setCommunities] = useState([]);
 
   useEffect(() => {
     // Check if offcanvasRef is available before initializing the Offcanvas
@@ -18,6 +24,33 @@ const Community = () => {
       // new window.bootstrap.Offcanvas(offcanvasRef.current);
     }
   }, [offcanvasRef]);
+
+  function getCommunities() {
+    axios.get('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/get-communities', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        const data = response.data;
+        const communityData = data.sort((a, b) => b.createdAt - a.createdAt);
+        setCommunities(communityData);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+
+  useEffect(() => {
+    const user = firebase.auth().currentUser || JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      window.location.href = '/profile';
+      return;
+    }
+    getCommunities();
+  }, []);
+
 
   return (
     <div className='background'>
@@ -47,18 +80,7 @@ const Community = () => {
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div className="offcanvas-body">
-            <form className="d-flex mt-3" role="search">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">Channel 01</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Channel 02</a>
-              </li>
-            </ul>
+              <CommunitySearch communities={communities} postJoin={getCommunities} />
           </div>
         </div>
       </div>
@@ -68,42 +90,11 @@ const Community = () => {
     <section id="home" className="home-dg container">
       <div className="row" data-bs-theme="dark">
         <h2 className="heading">Channels</h2>
-        <div className="g-col-6 ch">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">Children's Rights</h5>
-              <p className="card-text">Update yourself with rights of a child</p>
-              <a href="#" className="btn btn-outline-danger">Join</a>
-            </div>
-          </div>
-        </div>
-        <div className="g-col-6 ch">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">Women's Rights</h5>
-              <p className="card-text">Stay on track with recent updates on woman and their rights</p>
-              <a href="#" className="btn btn-outline-danger">Join</a>
-            </div>
-          </div>
-        </div>
-        <div className="g-col-6 ch">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">ON Sports</h5>
-              <p className="card-text">Being an athlete, know your welfare clubs.</p>
-              <a href="#" className="btn btn-outline-danger">Join</a>
-            </div>
-          </div>
-        </div>
-        <div className="g-col-6 ch">
-          <div className="card ch">
-            <div className="card-body">
-              <h5 className="card-title">Student's Justice Club</h5>
-              <p className="card-text">Join and discuss the Student's revolutions.</p>
-              <a href="#" className="btn btn-outline-danger">Join</a>
-            </div>
-          </div>
-        </div>
+          {
+            communities.map((community) => (
+              CommunityCard(community, getCommunities, firebase)
+            ))
+          }
       </div>
     </section>
 
