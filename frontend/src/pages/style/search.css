@@ -2,6 +2,7 @@
 .markdown-content {
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    color: white;
     font-size: 16px;
   }
   
@@ -27,6 +28,10 @@
     margin-bottom: 10px;
   }
   
+  .button_dropbtn{
+    padding-bottom: 50;
+
+  }
   .section-title{
     font-size: 24px;
     font-weight: bold;
@@ -34,6 +39,20 @@
     display: flex;
     justify-content: center;
   }
+
+  .laws{
+    background-color: #070F2B;
+  }
+
+  .section-title{
+    color: #9290C3;
+  }
+
+
+ .law {
+  margin-top: 30px;
+  color: white;
+ }
   
   /* Add more styles as needed */
   

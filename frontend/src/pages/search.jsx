@@ -47,7 +47,7 @@ function Search() {
   return (
     <div>
       <section className="laws search" id="laws">
-        <h1 className="section-title">Laws</h1>
+        <h1 className="section-title">LAWS</h1>
         <div className="search_bar">
           <form onSubmit={handleSubmit}>
             <input type="text" id="searchInput" placeholder="Search laws..." onChange={handleInputChange} value={query} />
@@ -56,7 +56,7 @@ function Search() {
             </button>
           </form>
           <div className="laws__item">
-            <h2>Laws Content:</h2>
+            <h2 class="law"></h2>
             <div className="markdown-content">
               <ReactMarkdown>{generatedContent}</ReactMarkdown>
             </div>

@@ -15,13 +15,13 @@ function MainContent() {
                     </div>
 
                     <div className="home__social">
-                        <a href="https://www.facebook.com/" target="_blank" className="home__social-link">
+                        <a href="https://www.facebook.com/profile.php?id=61556933634584&sk=about" target="_blank" className="home__social-link">
                             <i className="ri-facebook-box-fill"></i>
                         </a>
-                        <a href="https://www.instagram.com/" target="_blank" className="home__social-link">
+                        <a href="https://www.instagram.com/SelenifyJustice" target="_blank" className="home__social-link">
                             <i className="ri-instagram-fill"></i>
                         </a>
-                        <a href="https://twitter.com/" target="_blank" className="home__social-link">
+                        <a href="https://twitter.com/SelenifyJustice" target="_blank" className="home__social-link">
                             <i className="ri-twitter-fill"></i>
                         </a>
                     </div>
@@ -123,7 +123,7 @@ function MainContent() {
             <section className="subscribe section">
                 <div className="subscribe__bg">
                     <div className="subscribe__container container">
-                        <h2 className="section__title subscribe__title">Be A Member <br/> of Peacify</h2>
+                        <h2 className="section__title subscribe__title">Be A Member <br/> of Selenify</h2>
                         <p className="subscribe__description">Be a part of our Team and empower justice & peace.</p>
                         <form action="" className="subscribe__form">
                             <input type="text" placeholder="Enter email" className="subscribe__input" />
