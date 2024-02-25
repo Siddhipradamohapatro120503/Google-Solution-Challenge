@@ -11,7 +11,7 @@ const CommunityCard = (community, postJoin) => {
 
     function handleJoin(e) {
         e.preventDefault();
-        axios.post('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/add-member-to-community', {
+        axios.post('http://' + process.env.REACT_APP_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/add-member-to-community', {
             communityId: id,
             memberId: user?.uid,
         })
