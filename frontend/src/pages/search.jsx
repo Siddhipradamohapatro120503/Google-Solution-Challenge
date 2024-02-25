@@ -12,7 +12,7 @@ function Search() {
     setIsLoading(true); // Set loading to true when search begins
 
     try {
-      const response = await fetch('http://localhost:8000/generate', {
+      const response = await fetch('http://' + process.env.REACT_APP_HOST + ':8000/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

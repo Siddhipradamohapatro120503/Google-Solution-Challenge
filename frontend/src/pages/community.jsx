@@ -53,7 +53,7 @@ const Community = () => {
 
   function raisePetition(e) {
     e.preventDefault();
-    axios.post('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/add-community', {
+    axios.post('http://' + process.env.REACT_APP_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/add-community', {
       name: title,
       description: description,
     }, {
@@ -63,7 +63,7 @@ const Community = () => {
     })
       .then((response) => {
         const id = response.data.data.id;
-        axios.post('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/add-member-to-community', {
+        axios.post('http://' + process.env.REACT_APP_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/add-member-to-community', {
           communityId: id,
           memberId: user?.uid,
         }).then((response) => {
@@ -85,7 +85,7 @@ const Community = () => {
   }
 
   function getCommunities() {
-    axios.get('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/get-communities', {
+    axios.get('http://' + process.env.REACT_APP_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/get-communities', {
       headers: {
         'Content-Type': 'application/json',
       },
