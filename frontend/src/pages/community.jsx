@@ -9,6 +9,32 @@ import CommunitySearch from '../components/CommunitySearch.jsx';
 
 const Community = () => {
   const offcanvasRef = useRef(null);
+  const [showForm, setShowForm] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  let user = firebase.auth().currentUser || JSON.parse(localStorage.getItem('user'));
+
+  const handleToggleForm = () => {
+    setShowForm(!showForm);
+  };
+
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        setShowForm(false);
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [formRef]);
+
 
   const [communities, setCommunities] = useState([]);
 
@@ -25,6 +51,39 @@ const Community = () => {
     }
   }, [offcanvasRef]);
 
+  function raisePetition(e) {
+    e.preventDefault();
+    axios.post('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/add-community', {
+      name: title,
+      description: description,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        const id = response.data.data.id;
+        axios.post('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/add-member-to-community', {
+          communityId: id,
+          memberId: user?.uid,
+        }).then((response) => {
+          getCommunities();
+          console.log('Member added to community:', response.data);
+        })
+          .catch((error) => {
+            console.error('Error adding member to community:', error);
+          });
+        console.log('Petition raised successfully:', response);
+        setTitle('');
+        setDescription('');
+        setShowForm(false);
+      })
+      .catch((error) => {
+        console.error('Error raising petition:', error);
+      });
+
+  }
+
   function getCommunities() {
     axios.get('http://localho.st:' + process.env.REACT_APP_BACKEND_PORT + '/get-communities', {
       headers: {
@@ -33,7 +92,8 @@ const Community = () => {
     })
       .then((response) => {
         const data = response.data;
-        const communityData = data.sort((a, b) => b.createdAt - a.createdAt);
+        const communityData = data.sort((a, b) => b.createdAt._seconds - a.createdAt._seconds);
+        console.log('Fetched communities:', communityData);
         setCommunities(communityData);
       })
       .catch((error) => {
@@ -91,6 +151,7 @@ const Community = () => {
       <div className="row" data-bs-theme="dark">
         <h2 className="heading">Channels</h2>
           {
+            communities.length === 0 ? <h3>No communities found</h3> :
             communities.map((community) => (
               CommunityCard(community, getCommunities, firebase)
             ))
@@ -135,10 +196,41 @@ const Community = () => {
       <h3 className="text">Wanna Raise a Petition?</h3>
       <h4 className="text">Gain a vote of 50k, and your petition will be noticed and filed by respective welfare societies and NGOs</h4>
       <div className="d-grid gap-2 col-6 mx-auto h-100">
-        <button className="btn btn-danger" type="button">Raise Petition</button>
+          <button className="btn btn-danger" type="button" onClick={handleToggleForm}>Raise Petition</button>
       </div>
     </section>
+      {showForm && (<div className={`form-background ${showForm ? 'show' : ''}`}>
+        <div className="form-overlay form-container" ref={formRef}>
+          <form onSubmit={raisePetition} className="form-content">
+            <div className="form-group mb-2">
+              <label htmlFor="title"><b>Title of the Petition </b></label>
+              <input
+                type="text"
+                className="form-control"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="form-group mb-2">
+              <label htmlFor="description"><b>Description of the Petition</b></label>
+              <textarea
+                className="form-control"
+                id="description"
+                rows="3"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+      )}
     </div>
+
   );
 }
 
